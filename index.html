@@ -7,6 +7,7 @@
 <meta content="#E8D5C4" name="theme-color"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <title>AURA 3.0</title>
+<meta name="aura-version" content="3.2.0"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -309,7 +310,15 @@
         @keyframes glow{0%,100%{text-shadow:0 0 20px rgba(255,255,255,.5)}50%{text-shadow:0 0 40px rgba(255,255,255,.8)}}
         @keyframes rotate{0%{transform:scale(0) rotate(0)}50%{transform:scale(1.2) rotate(180deg)}100%{transform:scale(1) rotate(360deg)}}
         @keyframes scaleIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-    </style>
+    
+        /* iPhone safe-area + smooth layout */
+        #app{padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);}
+        .header{padding-top: calc(14px + env(safe-area-inset-top));}
+        .actions{padding-bottom: calc(14px + env(safe-area-inset-bottom));}
+        .bottom-nav{padding-bottom: calc(16px + env(safe-area-inset-bottom));}
+        .modal-content{padding-bottom: calc(18px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch;}
+        body{overscroll-behavior-y: none;}
+</style>
 
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b1220">
@@ -1282,44 +1291,153 @@
     </script>
 
 <style>
-/* PWA + audio controls */
-#aura-audio-bar{
-  position:fixed; right:16px; bottom:16px; z-index:9999;
-  display:flex; align-items:center; gap:10px;
-  padding:10px 12px; border-radius:14px;
-  background:rgba(10,18,32,.78); backdrop-filter: blur(10px);
+/* PWA + audio controls (iPhone friendly) */
+#aura-audio-fab{
+  position:fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 9999;
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  font-family:inherit;
+  touch-action:none; /* for drag */
+}
+
+#aura-audio-fab-btn{
+  all:unset;
+  width:52px; height:52px;
+  border-radius:16px;
+  display:grid; place-items:center;
+  cursor:pointer;
+  background:rgba(10,18,32,.80);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
+  color:#fff;
+  font-size:22px;
+  user-select:none;
+}
+
+#aura-audio-panel{
+  width:min(320px, calc(100vw - 32px));
+  padding:12px 12px 10px 12px;
+  border-radius:16px;
+  background:rgba(10,18,32,.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: 0 14px 50px rgba(0,0,0,.45);
+  color:#fff;
+  transform-origin: bottom right;
+}
+
+#aura-audio-panel.is-hidden{
+  display:none;
+}
+
+#aura-audio-panel .row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+#aura-audio-panel .row.controls{ margin-bottom:8px; }
+#aura-audio-panel .title{ font-weight:700; letter-spacing:.2px; }
+#aura-audio-panel .small{ font-size:12px; opacity:.85; }
+#aura-audio-panel .muted{ opacity:.75; }
+#aura-audio-panel .icon{
+  all:unset;
+  cursor:pointer;
+  width:34px; height:34px;
+  border-radius:12px;
+  display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+}
+#aura-audio-toggle.primary{
+  all:unset;
+  cursor:pointer;
+  width:46px; height:38px;
+  border-radius:12px;
+  display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.10);
+  font-weight:700;
+}
+
+#aura-audio-volume{
+  -webkit-appearance:none;
+  width:100%;
+  height:6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.20);
+  outline:none;
+}
+#aura-audio-volume::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:18px; height:18px;
+  border-radius:50%;
+  background:#fff;
+  border:0;
+}
+#aura-audio-vol-label{ width:44px; text-align:right; }
+
+#aura-audio-panel .select{
+  all:unset;
+  cursor:pointer;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.08);
+  font-size:12px;
+}
+
+
+/* Install hint */
+#aura-install-hint{ position:fixed; left:16px; right:16px; bottom:max(16px, env(safe-area-inset-bottom)); z-index:9998;
+  padding:14px 14px 12px; border-radius:16px;
+  background:rgba(10,18,32,.84); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border:1px solid rgba(255,255,255,.10);
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
   color:#fff; font-family:inherit;
-}
-#aura-audio-bar button{
-  all:unset; cursor:pointer;
-  padding:8px 10px; border-radius:12px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.10);
-}
-#aura-audio-bar button:active{ transform: translateY(1px); }
-#aura-audio-bar .label{ font-size:12px; opacity:.85; margin-right:2px; }
-#aura-audio-bar input[type="range"]{ width:110px; }
-#aura-install-hint{
-  position:fixed; left:16px; bottom:16px; z-index:9998;
-  max-width:min(520px, calc(100vw - 32px));
-  padding:12px 14px; border-radius:14px;
-  background:rgba(10,18,32,.78); backdrop-filter: blur(10px);
-  border:1px solid rgba(255,255,255,.10);
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
-  color:#fff; font-family:inherit;
 }
-#aura-install-hint .title{ font-weight:700; margin-bottom:6px; }
-#aura-install-hint .small{ font-size:12px; opacity:.9; line-height:1.35; }
+#aura-install-hint .title{ font-weight:700; margin:0 0 6px; }
+#aura-install-hint .txt{ font-size:12px; opacity:.9; line-height:1.35; }
 #aura-install-hint .close{ position:absolute; right:10px; top:10px; cursor:pointer; opacity:.8; }
 </style>
 
 
-<div id="aura-audio-bar" aria-label="Controlli musica di fondo" style="display:none">
-  <button id="aura-audio-toggle" title="Avvia / Ferma musica">▶︎</button>
-  <span class="label">Musica</span>
-  <input id="aura-audio-volume" type="range" min="0" max="100" value="25" />
+<div id="aura-audio-fab" aria-label="Controlli musica di fondo" style="display:none">
+  <button id="aura-audio-fab-btn" title="Musica" aria-label="Musica">♫</button>
+  <div id="aura-audio-panel" class="is-hidden" role="dialog" aria-label="Pannello musica">
+    <div class="row">
+      <div class="title">Musica</div>
+      <button id="aura-audio-panel-close" class="icon" title="Chiudi">✕</button>
+    </div>
+    <div class="row controls">
+      <button id="aura-audio-toggle" class="primary" title="Avvia / Ferma musica">▶︎</button>
+      <input id="aura-audio-volume" type="range" min="0" max="100" value="25" />
+      <span id="aura-audio-vol-label" class="small">25%</span>
+    </div>
+    <div class="row">
+      <div class="small muted">Soundscape</div>
+      <select id="aura-audio-mode" class="select" aria-label="Modalità musica">
+        <option value="ocean">Oceano</option>
+        <option value="rain">Pioggia</option>
+        <option value="forest">Bosco</option>
+        <option value="space">Spazio</option>
+      </select>
+    </div>
+    <div class="row">
+      <button id="aura-audio-hide" class="icon" title="Nascondi pulsante musica" aria-label="Nascondi">👁️‍🗨️</button>
+      <div class="small muted" style="text-align:right">Tap ♫ per aprire/chiudere</div>
+    </div>
+
+    <div class="row small muted">Suggerimento: tieni premuto e trascina per spostare.</div>
+  </div>
 </div>
 
 <div id="aura-install-hint" style="display:none">
@@ -1337,8 +1455,8 @@
 ========================= */
 (function(){
   // Show audio bar always; start requires gesture
-  const audioBar = document.getElementById('aura-audio-bar');
-  if (audioBar) audioBar.style.display = 'flex';
+  const audioFab = document.getElementById('aura-audio-fab');
+  if (audioFab) audioFab.style.display = 'flex';
 
   // iOS install hint (only in Safari on iPhone/iPad when not standalone)
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1368,196 +1486,441 @@
    Background music (WebAudio – lightweight “ambient pad”)
    iOS autoplay policy: must start on user gesture.
 ========================= */
+/* =========================
+   Background Audio + Feedback
+   - iOS friendly (user gesture required)
+   - No "tono fisso": soundscape basato su noise + filtri + onde random
+========================= */
 (function(){
+  const fab = document.getElementById('aura-audio-fab');
+  const fabBtn = document.getElementById('aura-audio-fab-btn');
+  const panel = document.getElementById('aura-audio-panel');
+  const closeBtn = document.getElementById('aura-audio-panel-close');
   const btn = document.getElementById('aura-audio-toggle');
   const vol = document.getElementById('aura-audio-volume');
+  const volLbl = document.getElementById('aura-audio-vol-label');
+  const modeSel = document.getElementById('aura-audio-mode');
+  const hideBtn = document.getElementById('aura-audio-hide');
 
-  if (!btn || !vol) return;
+  function getAppState(){
+    try{
+      const s = localStorage.getItem('aura_v3_state');
+      return s ? JSON.parse(s) : null;
+    }catch(_){ return null; }
+  }
+  function isSoundEnabled(){
+    const st = getAppState();
+    return st && st.settings ? (st.settings.sound !== false) : true;
+  }
+  function isVibrateEnabled(){
+    const st = getAppState();
+    return st && st.settings ? (st.settings.vibrate === true) : false;
+  }
+
+  let fxCtx = null;
+  function fxTick(){
+    if (!isSoundEnabled()) return;
+    try{
+      fxCtx = fxCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = fxCtx;
+      const now = ctx.currentTime;
+      const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.02), ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i=0;i<data.length;i++){
+        const t = i/data.length;
+        data[i] = (Math.random()*2-1) * (1 - t);
+      }
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass'; bp.frequency.value = 1800; bp.Q.value = 0.8;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.20, now+0.002);
+      g.gain.exponentialRampToValueAtTime(0.0001, now+0.02);
+      src.connect(bp); bp.connect(g); g.connect(ctx.destination);
+      src.start(now); src.stop(now+0.021);
+    }catch(_){}
+  }
+  function fxHaptic(){
+    if (!isVibrateEnabled()) return;
+    try{ if (navigator.vibrate) navigator.vibrate(12); }catch(_){}
+  }
+  function wireFeedback(){
+    const ids = [
+      'aura-audio-fab-btn','aura-audio-panel-close','aura-audio-toggle','aura-audio-hide',
+      'btnBreath','btnJournal','btnStats','btnBadges','btnSettings'
+    ];
+    ids.forEach(id=>{
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', ()=>{ fxHaptic(); fxTick(); }, {passive:true});
+    });
+
+    const root = document.getElementById('app');
+    if (!root) return;
+    root.addEventListener('click', (e)=>{
+      const t = e.target;
+      if (!t) return;
+      const b = t.closest && t.closest('button,[role="button"]');
+      if (!b) return;
+      if (b.closest && b.closest('#aura-audio-fab')) return;
+      fxHaptic(); fxTick();
+    }, {passive:true});
+  }
+
+  if (!fab || !fabBtn || !panel || !closeBtn || !btn || !vol) return;
+  if (!(window.AudioContext || window.webkitAudioContext)) return;
+
+  const fabHidden = localStorage.getItem('aura_music_fab_hidden') === '1';
+  fab.style.display = fabHidden ? 'none' : 'flex';
 
   let ctx = null;
   let master = null;
-  // audio nodes (relaxing soundscape)
-  let noiseSrc=null, lp=null, bp=null, bedGain=null, delay=null, fb=null, wet=null, dry=null, panner=null, panNode=null;
-  let lfoAmp=null, lfoAmpGain=null, lfoFilter=null, lfoFilterGain=null, lfoPan=null, lfoPanGain=null;
-  let osc = [];
-  let lfo = [];
   let playing = false;
+  let nodes = {};
+  let timers = [];
+
+  const DEFAULT_MODE = localStorage.getItem('aura_music_mode') || 'ocean';
+  if (modeSel) modeSel.value = DEFAULT_MODE;
+
+  function clearTimers(){
+    timers.forEach(t=>{ try{ clearInterval(t); clearTimeout(t); }catch(_){} });
+    timers = [];
+  }
+  function stopAllNodes(){
+    try{
+      Object.values(nodes).forEach(n=>{
+        try{
+          if (!n) return;
+          if (n.stop) n.stop();
+          if (n.disconnect) n.disconnect();
+        }catch(_){}
+      });
+    }catch(_){}
+    nodes = {};
+  }
+
+  function makeNoiseBuffer(ctx, seconds=2.0){
+    const len = Math.floor(ctx.sampleRate * seconds);
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i=0;i<len;i++){ data[i] = (Math.random()*2 - 1); }
+    return buf;
+  }
+
+  function gentleReverb(ctx){
+    const convolver = ctx.createConvolver();
+    const seconds = 1.2;
+    const len = Math.floor(ctx.sampleRate * seconds);
+    const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let ch=0; ch<2; ch++){
+      const d = buf.getChannelData(ch);
+      for (let i=0;i<len;i++){
+        const t = i/len;
+        d[i] = (Math.random()*2-1) * Math.pow(1-t, 3.2) * 0.30;
+      }
+    }
+    convolver.buffer = buf;
+    return convolver;
+  }
 
   function setup(){
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     master = ctx.createGain();
-    master.gain.value = 0.0; // start muted, fade in on start()
-    master.connect(ctx.destination);
+    master.gain.value = 0.0001;
 
-    // ---------- Relaxing soundscape (no fixed tone) ----------
-    // Pink-ish noise buffer (gentle "air"/"rain" bed)
-    const durationSec = 3;
-    const bufferSize = ctx.sampleRate * durationSec;
-    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = noiseBuffer.getChannelData(0);
+    const wet = ctx.createGain(); wet.gain.value = 0.10;
+    const dry = ctx.createGain(); dry.gain.value = 1.0;
+    const conv = gentleReverb(ctx);
 
-    // Voss-McCartney-ish pink noise approximation
-    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-    for (let i=0; i<bufferSize; i++){
-      const white = Math.random()*2-1;
-      b0 = 0.99886 * b0 + white * 0.0555179;
-      b1 = 0.99332 * b1 + white * 0.0750759;
-      b2 = 0.96900 * b2 + white * 0.1538520;
-      b3 = 0.86650 * b3 + white * 0.3104856;
-      b4 = 0.55000 * b4 + white * 0.5329522;
-      b5 = -0.7616 * b5 - white * 0.0168980;
-      const pink = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-      b6 = white * 0.115926;
-      data[i] = (pink * 0.11); // overall level
-    }
+    master.connect(dry); dry.connect(ctx.destination);
+    master.connect(conv); conv.connect(wet); wet.connect(ctx.destination);
 
-    noiseSrc = ctx.createBufferSource();
-    noiseSrc.buffer = noiseBuffer;
-    noiseSrc.loop = true;
-
-    // Filters to keep it soft and non-fatiguing
-    lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 900;
-    lp.Q.value = 0.5;
-
-    bp = ctx.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.value = 180;
-    bp.Q.value = 0.8;
-
-    // Gentle "waves" amplitude movement
-    bedGain = ctx.createGain();
-    bedGain.gain.value = 0.0;
-
-    // Stereo motion
-    panner = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
-    panNode = panner || ctx.createGain();
-
-    // Very light ambience via short delay feedback (subtle, not echo)
-    delay = ctx.createDelay();
-    delay.delayTime.value = 0.18;
-    fb = ctx.createGain();
-    fb.gain.value = 0.12;
-    delay.connect(fb); fb.connect(delay);
-
-    wet = ctx.createGain(); wet.gain.value = 0.20;
-    dry = ctx.createGain(); dry.gain.value = 0.85;
-
-    // Routing
-    noiseSrc.connect(bp);
-    bp.connect(lp);
-
-    lp.connect(dry);
-    lp.connect(delay);
-    delay.connect(wet);
-
-    dry.connect(panNode);
-    wet.connect(panNode);
-
-    panNode.connect(bedGain);
-    bedGain.connect(master);
-
-    // LFOs (slow) for movement
-    lfoAmp = ctx.createOscillator();
-    lfoAmp.type = 'sine';
-    lfoAmp.frequency.value = 0.045; // ~22s cycle
-
-    lfoAmpGain = ctx.createGain();
-    lfoAmpGain.gain.value = 0.18; // depth
-    lfoAmp.connect(lfoAmpGain);
-    lfoAmpGain.connect(bedGain.gain);
-
-    lfoFilter = ctx.createOscillator();
-    lfoFilter.type = 'sine';
-    lfoFilter.frequency.value = 0.03; // ~33s cycle
-    lfoFilterGain = ctx.createGain();
-    lfoFilterGain.gain.value = 120; // Hz sweep
-    lfoFilter.connect(lfoFilterGain);
-    lfoFilterGain.connect(lp.frequency);
-
-    if (panner){
-      lfoPan = ctx.createOscillator();
-      lfoPan.type = 'sine';
-      lfoPan.frequency.value = 0.02; // ~50s cycle
-      lfoPanGain = ctx.createGain();
-      lfoPanGain.gain.value = 0.55;
-      lfoPan.connect(lfoPanGain);
-      lfoPanGain.connect(panner.pan);
-    }
-
-    // Start sources
-    noiseSrc.start();
-    lfoAmp.start();
-    lfoFilter.start();
-    if (lfoPan) lfoPan.start();
+    nodes.master = master; nodes.conv = conv; nodes.wet = wet; nodes.dry = dry;
   }
 
-
   function setVolume(v){
-    const target = Math.max(0, Math.min(100, v))/100;
-    if (master) master.gain.setTargetAtTime(target*0.35, ctx.currentTime, 0.05);
+    const val = Math.max(0, Math.min(100, v));
+    const gain = (val/100) * 0.30;
+    if (master && ctx){
+      const now = ctx.currentTime;
+      master.gain.setTargetAtTime(Math.max(0.0001, gain), now, 0.18);
+    }
+    if (volLbl) volLbl.textContent = `${val}%`;
+    btn.title = playing ? 'Ferma musica' : 'Avvia musica';
+  }
+
+  function spawnChime(){
+    if (!ctx || !master) return;
+    const now = ctx.currentTime;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    const lp = ctx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value = 1800 + Math.random()*600;
+
+    const base = 440;
+    const ratios = [0.5, 0.75, 1.0, 1.125, 1.25, 1.5];
+    const f = base * ratios[Math.floor(Math.random()*ratios.length)] * (0.9 + Math.random()*0.25);
+    o.type='sine';
+    o.frequency.setValueAtTime(f, now);
+
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.05, now+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, now+1.0 + Math.random()*0.6);
+
+    o.connect(lp); lp.connect(g); g.connect(master);
+    o.start(now); o.stop(now+1.8);
+  }
+
+  function buildOcean(){
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, 2.0);
+    noise.loop = true;
+
+    const lp = ctx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value = 380; lp.Q.value = 0.9;
+
+    const bp = ctx.createBiquadFilter();
+    bp.type='bandpass'; bp.frequency.value = 1100; bp.Q.value = 0.6;
+
+    const gOcean = ctx.createGain(); gOcean.gain.value = 0.32;
+    const gAir = ctx.createGain(); gAir.gain.value = 0.12;
+
+    noise.connect(lp); lp.connect(gOcean); gOcean.connect(master);
+    noise.connect(bp); bp.connect(gAir); gAir.connect(master);
+
+    noise.start();
+    nodes.noise = noise; nodes.lp = lp; nodes.bp = bp; nodes.gOcean=gOcean; nodes.gAir=gAir;
+
+    timers.push(setInterval(()=>{
+      const now = ctx.currentTime;
+      gOcean.gain.setTargetAtTime(0.20 + Math.random()*0.22, now, 2.8);
+      gAir.gain.setTargetAtTime(0.06 + Math.random()*0.10, now, 4.2);
+      lp.frequency.setTargetAtTime(320 + Math.random()*140, now, 3.5);
+      bp.frequency.setTargetAtTime(900 + Math.random()*500, now, 3.8);
+    }, 2600));
+
+    timers.push(setInterval(()=>{ if (Math.random()<0.45) spawnChime(); }, 6500));
+  }
+
+  function buildRain(){
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, 1.0);
+    noise.loop = true;
+
+    const hp = ctx.createBiquadFilter();
+    hp.type='highpass'; hp.frequency.value = 900; hp.Q.value = 0.7;
+
+    const g = ctx.createGain(); g.gain.value = 0.10;
+    noise.connect(hp); hp.connect(g); g.connect(master);
+
+    noise.start();
+    nodes.noise=noise; nodes.hp=hp; nodes.g=g;
+
+    function droplet(){
+      const now = ctx.currentTime;
+      const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate*0.03), ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for(let i=0;i<d.length;i++){
+        const t=i/d.length;
+        d[i]=(Math.random()*2-1)*Math.pow(1-t,2.4);
+      }
+      const src=ctx.createBufferSource(); src.buffer=buf;
+      const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1600+Math.random()*1200; bp.Q.value=0.9;
+      const gg=ctx.createGain();
+      gg.gain.setValueAtTime(0.0001, now);
+      gg.gain.exponentialRampToValueAtTime(0.10, now+0.005);
+      gg.gain.exponentialRampToValueAtTime(0.0001, now+0.08);
+      src.connect(bp); bp.connect(gg); gg.connect(master);
+      src.start(now); src.stop(now+0.09);
+    }
+    timers.push(setInterval(()=>{
+      const now=ctx.currentTime;
+      g.gain.setTargetAtTime(0.08+Math.random()*0.06, now, 1.8);
+      hp.frequency.setTargetAtTime(700+Math.random()*700, now, 2.2);
+      if (Math.random()<0.7) droplet();
+      if (Math.random()<0.25) droplet();
+    }, 420));
+  }
+
+  function buildForest(){
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, 2.0);
+    noise.loop = true;
+
+    const lp = ctx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value = 520; lp.Q.value = 0.8;
+
+    const g = ctx.createGain(); g.gain.value = 0.20;
+
+    noise.connect(lp); lp.connect(g); g.connect(master);
+    noise.start();
+    nodes.noise=noise; nodes.lp=lp; nodes.g=g;
+
+    function chirp(){
+      const now = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const gg = ctx.createGain();
+      const f1 = 1800 + Math.random()*900;
+      const f2 = f1 + 400 + Math.random()*600;
+      o.type='sine';
+      o.frequency.setValueAtTime(f1, now);
+      o.frequency.exponentialRampToValueAtTime(f2, now+0.08);
+      gg.gain.setValueAtTime(0.0001, now);
+      gg.gain.exponentialRampToValueAtTime(0.035, now+0.01);
+      gg.gain.exponentialRampToValueAtTime(0.0001, now+0.20);
+      o.connect(gg); gg.connect(master);
+      o.start(now); o.stop(now+0.22);
+    }
+    timers.push(setInterval(()=>{
+      const now=ctx.currentTime;
+      lp.frequency.setTargetAtTime(420+Math.random()*240, now, 3.0);
+      g.gain.setTargetAtTime(0.14+Math.random()*0.12, now, 2.8);
+      if (Math.random()<0.35) chirp();
+      if (Math.random()<0.18) spawnChime();
+    }, 3200));
+  }
+
+  function buildSpace(){
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, 2.0);
+    noise.loop = true;
+
+    const lp = ctx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value = 260; lp.Q.value = 0.9;
+    const gNoise = ctx.createGain(); gNoise.gain.value = 0.10;
+
+    noise.connect(lp); lp.connect(gNoise); gNoise.connect(master);
+    noise.start();
+    nodes.noise=noise; nodes.lp=lp; nodes.gNoise=gNoise;
+
+    const freqs = [196, 247, 294];
+    const osc = freqs.map((f,i)=>{
+      const o=ctx.createOscillator();
+      const gg=ctx.createGain();
+      o.type='triangle';
+      o.frequency.value=f;
+      o.detune.value=(i-1)*6;
+      gg.gain.value=0.06;
+      o.connect(gg); gg.connect(master);
+      o.start();
+      return {o,gg};
+    });
+    nodes.pad=osc;
+
+    timers.push(setInterval(()=>{
+      const now=ctx.currentTime;
+      osc.forEach(({o,gg},i)=>{
+        o.detune.setTargetAtTime((Math.random()*2-1)*12 + (i-1)*6, now, 6.0);
+        gg.gain.setTargetAtTime(0.04 + Math.random()*0.04, now, 6.0);
+      });
+      lp.frequency.setTargetAtTime(220+Math.random()*120, now, 6.0);
+      if (Math.random()<0.25) spawnChime();
+    }, 7000));
+  }
+
+  function buildByMode(mode){
+    clearTimers();
+    stopAllNodes();
+    nodes.master = master;
+    if (mode === 'rain') buildRain();
+    else if (mode === 'forest') buildForest();
+    else if (mode === 'space') buildSpace();
+    else buildOcean();
   }
 
   function start(){
     if (!ctx) setup();
     if (ctx.state === 'suspended') ctx.resume();
-
-    const now = ctx.currentTime;
-
-    // Fade in sound bed + apply volume slider
-    bedGain.gain.cancelScheduledValues(now);
-    bedGain.gain.setTargetAtTime(0.22, now, 1.2);
-
-    setVolume(+vol.value);
-
     playing = true;
-    btn.textContent = '❚❚';
-    btn.title = 'Ferma musica';
+    btn.textContent = '⏸';
+    buildByMode((modeSel && modeSel.value) || DEFAULT_MODE);
+    setVolume(+vol.value);
   }
-
-
 
   function stop(){
-    if (!ctx) return;
-    const now = ctx.currentTime;
-
-    bedGain.gain.cancelScheduledValues(now);
-    bedGain.gain.setTargetAtTime(0.0, now, 0.6);
-
-    master.gain.cancelScheduledValues(now);
-    master.gain.setTargetAtTime(0.0, now, 0.5);
-
     playing = false;
     btn.textContent = '▶︎';
-    btn.title = 'Avvia musica';
+    clearTimers();
+    stopAllNodes();
+    if (master && ctx){
+      const now = ctx.currentTime;
+      master.gain.setTargetAtTime(0.0001, now, 0.18);
+    }
   }
 
+  function openPanel(){ panel.classList.remove('is-hidden'); }
+  function closePanel(){ panel.classList.add('is-hidden'); }
+  fabBtn.addEventListener('click', ()=>{ (panel.classList.contains('is-hidden')) ? openPanel() : closePanel(); }, {passive:true});
+  closeBtn.addEventListener('click', closePanel, {passive:true});
+  document.addEventListener('pointerdown', (e)=>{
+    if (!panel || panel.classList.contains('is-hidden')) return;
+    const t = e.target;
+    if (t && (t.closest('#aura-audio-fab'))) return;
+    closePanel();
+  }, {passive:true});
+
+  if (hideBtn){
+    hideBtn.addEventListener('click', ()=>{
+      closePanel();
+      fab.style.display='none';
+      localStorage.setItem('aura_music_fab_hidden','1');
+    }, {passive:true});
+  }
+
+  let dragging = false, startX=0, startY=0, baseRight=0, baseBottom=0;
+  fab.addEventListener('pointerdown', (e)=>{
+    if (e.target && (e.target.id === 'aura-audio-volume' || e.target.id === 'aura-audio-mode')) return;
+    dragging = true;
+    try{ fab.setPointerCapture(e.pointerId); }catch(_){}
+    startX = e.clientX; startY = e.clientY;
+    const cs = getComputedStyle(fab);
+    baseRight = parseFloat(cs.right) || 0;
+    baseBottom = parseFloat(cs.bottom) || 0;
+  });
+  fab.addEventListener('pointermove', (e)=>{
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const newRight = Math.max(8, baseRight - dx);
+    const newBottom = Math.max(8, baseBottom - dy);
+    fab.style.right = `${newRight}px`;
+    fab.style.bottom = `${newBottom}px`;
+  });
+  fab.addEventListener('pointerup', ()=> dragging=false);
+  fab.addEventListener('pointercancel', ()=> dragging=false);
 
   btn.addEventListener('click', ()=>{
-    try{
-      playing ? stop() : start();
-    }catch(e){
-      // fallback: disable
-      btn.disabled = true;
-    }
+    try{ playing ? stop() : start(); }catch(_){ btn.disabled = true; }
+    localStorage.setItem('aura_music_on', playing ? '1' : '0');
   });
+  vol.addEventListener('input', ()=> setVolume(+vol.value), {passive:true});
+  vol.addEventListener('change', ()=> localStorage.setItem('aura_music_vol', String(vol.value)), {passive:true});
 
-  vol.addEventListener('input', ()=> setVolume(+vol.value));
+  if (modeSel){
+    modeSel.addEventListener('change', ()=>{
+      localStorage.setItem('aura_music_mode', modeSel.value);
+      if (playing) buildByMode(modeSel.value);
+    }, {passive:true});
+  }
 
-  // Persist user preference
-  const saved = localStorage.getItem('aura_music_on');
   const savedVol = localStorage.getItem('aura_music_vol');
   if (savedVol) vol.value = savedVol;
-  vol.addEventListener('change', ()=> localStorage.setItem('aura_music_vol', String(vol.value)));
+  if (volLbl) volLbl.textContent = `${vol.value}%`;
 
+  const saved = localStorage.getItem('aura_music_on');
   if (saved === '1'){
-    // require gesture: we can show “ready” state but not auto-start
     btn.textContent = '▶︎';
     btn.title = 'Avvia musica (tap)';
   }
-  btn.addEventListener('click', ()=> localStorage.setItem('aura_music_on', playing ? '1' : '0'));
+
+  window.__AURA_RESTORE_MUSIC_FAB = function(){
+    localStorage.setItem('aura_music_fab_hidden','0');
+    fab.style.display='flex';
+  };
+
+  wireFeedback();
 })();
+;
 </script>
 
 </body>

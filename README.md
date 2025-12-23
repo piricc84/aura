@@ -10,3 +10,7 @@
 
 ## Nota audio (iOS)
 La musica parte solo dopo un tap (policy Apple). Usa ▶︎ / ❚❚ e lo slider volume.
+
+## Audio 3.2.0
+- Soundscape: Oceano / Pioggia / Bosco / Spazio.
+- Nel pannello Musica puoi nascondere ♫.

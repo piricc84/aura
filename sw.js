@@ -1,5 +1,5 @@
-/* AURA PWA Service Worker (v3.0.1) */
-const CACHE_NAME = 'aura-3.0.1-cache';
+/* AURA PWA Service Worker (v3.1.0) */
+const CACHE_NAME = 'aura-3.2.0-cache';
 const ASSETS = [
   './',
   './index.html',
