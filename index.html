@@ -4,9 +4,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
-<meta content="#E8D5C4" name="theme-color"/>
+<meta content="#8BB898" name="theme-color"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
-<title>AURA 3.0</title>
+<title>AURA 3.4 • Elfo nella Foresta</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -312,7 +312,64 @@
         @keyframes glow{0%,100%{text-shadow:0 0 20px rgba(255,255,255,.5)}50%{text-shadow:0 0 40px rgba(255,255,255,.8)}}
         @keyframes rotate{0%{transform:scale(0) rotate(0)}50%{transform:scale(1.2) rotate(180deg)}100%{transform:scale(1) rotate(360deg)}}
         @keyframes scaleIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-    </style>
+    
+        /* --- AURA 3.4: Foresta + Elfo + Mini Player + Privacy --- */
+        .forest-layers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+        .tree-layer{position:absolute;bottom:0;width:120%;left:-10%;height:55%;opacity:.18;filter:blur(0px)}
+        .tree-layer.back{height:70%;opacity:.10;transform:translateY(6px)}
+        .tree-layer.front{height:50%;opacity:.22}
+        .tree-layer svg{width:100%;height:100%}
+        .fireflies{position:absolute;inset:0;pointer-events:none;opacity:.0;transition:opacity 1s}
+        [data-theme=forest] .fireflies{opacity:.55}
+        .firefly{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,255,255,0) 70%);filter:drop-shadow(0 0 10px rgba(255,255,255,.8));animation:fly 6s ease-in-out infinite}
+        @keyframes fly{0%{transform:translate(0,0);opacity:.2}30%{opacity:1}60%{transform:translate(24px,-18px)}100%{transform:translate(0,0);opacity:.2}}
+
+        /* Elf skin: usa la struttura esistente del pet */
+        .pet[data-stage="1"] .pet-body{background:linear-gradient(145deg,#C6E7C9,#7CC488);border-radius:44% 44% 54% 54%}
+        .pet[data-stage="2"] .pet-body{background:linear-gradient(145deg,#BFE8C6,#5FB86F)}
+        .pet .elf-hat{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:84px;height:48px;z-index:3;filter:drop-shadow(0 8px 16px var(--shadow-strong))}
+        .pet .elf-hat::before{content:'';position:absolute;inset:0;background:linear-gradient(145deg,#2F6B45,#1E3A24);border-radius:50% 50% 20% 20%}
+        .pet .elf-hat::after{content:'';position:absolute;right:-10px;top:-10px;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,255,255,.2));opacity:.9}
+        .pet .elf-hat-tip{position:absolute;right:-26px;top:6px;width:46px;height:34px;border-radius:0 0 40px 40px;background:linear-gradient(145deg,#2F6B45,#1E3A24);transform:rotate(18deg)}
+        .pet[data-stage="0"] .elf-hat{display:none}
+        .pet[data-stage="2"] .elf-hat::after{opacity:1;animation:twinkle 2.8s ease-in-out infinite}
+        .pet-ear{border-radius:60% 60% 10% 10%}
+        .pet[data-stage="1"] .pet-ear,.pet[data-stage="2"] .pet-ear{background:linear-gradient(145deg,#C6E7C9,#7CC488)}
+        .pet[data-stage="1"] .pet-ear.left,.pet[data-stage="2"] .pet-ear.left{transform:rotate(-28deg) translateX(-4px)}
+        .pet[data-stage="1"] .pet-ear.right,.pet[data-stage="2"] .pet-ear.right{transform:rotate(28deg) translateX(4px)}
+
+        /* Mini player */
+        .music-fab{position:fixed;right:16px;bottom:108px;width:56px;height:56px;border-radius:18px;border:none;background:var(--gradient-calm);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px var(--shadow-strong);z-index:1200;cursor:pointer;transition:transform .2s,opacity .2s}
+        .music-fab:active{transform:scale(.94)}
+        .music-fab.hidden{opacity:0;pointer-events:none}
+        .music-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:170px;width:min(440px,calc(100vw - 26px));background:rgba(255,255,255,.7);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35);border-radius:18px;box-shadow:0 12px 34px var(--shadow-strong);z-index:1201;display:none;overflow:hidden}
+        [data-theme=night] .music-banner{background:rgba(28,37,48,.65);border-color:rgba(255,255,255,.08)}
+        .music-banner.active{display:block;animation:slideUp .35s cubic-bezier(.34,1.56,.64,1)}
+        .music-row{display:flex;align-items:center;gap:10px;padding:12px 12px}
+        .music-title{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--text-dim)}
+        .music-chip{display:flex;gap:6px;margin-left:auto}
+        .chip-btn{border:none;background:var(--bg-2);padding:8px 10px;border-radius:12px;font-size:14px;cursor:pointer;box-shadow:0 2px 8px var(--shadow-soft)}
+        .chip-btn.active{background:var(--text);color:var(--bg-1)}
+        .music-slider{width:100%;padding:0 14px 12px}
+        .music-slider input{width:100%}
+        .music-actions{display:flex;gap:10px;padding:0 12px 12px}
+        .music-ctl{flex:1;border:none;border-radius:14px;background:var(--text);color:var(--bg-1);padding:12px 10px;font-weight:700;cursor:pointer}
+        .music-close{border:none;border-radius:14px;background:var(--bg-2);padding:12px 10px;font-weight:700;cursor:pointer}
+
+        /* Privacy lock */
+        .lock-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);z-index:6000;display:none;align-items:center;justify-content:center;padding:26px}
+        .lock-overlay.active{display:flex}
+        .lock-card{width:min(420px,100%);background:var(--bg-1);border-radius:24px;padding:26px 20px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+        .lock-icon{font-size:44px;margin-bottom:10px}
+        .lock-title{font-size:20px;font-weight:700;margin-bottom:6px}
+        .lock-text{font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:14px}
+        .lock-pin{display:flex;gap:10px;justify-content:center;margin:10px 0 16px}
+        .lock-pin input{width:54px;height:54px;text-align:center;font-size:22px;font-weight:800;border-radius:16px;border:2px solid var(--accent-light);background:var(--bg-2);color:var(--text)}
+        .lock-pin input:focus{outline:none;border-color:var(--calm)}
+        .lock-btn{width:100%;padding:14px;border:none;border-radius:14px;background:var(--text);color:var(--bg-1);font-weight:800;cursor:pointer}
+        .lock-hint{margin-top:10px;font-size:11px;color:var(--text-dim)}
+
+</style>
 
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b1220">
@@ -324,10 +381,10 @@
 
 </head>
 <body>
-<div data-theme="day" id="app"></div>
+<div data-theme="forest" id="app"></div>
 <script>
         const app = (() => {
-            const STORAGE = { state: 'aura_v3_state', logs: 'aura_v3_logs', settings: 'aura_v3_settings', badges: 'aura_v3_badges', onboarding: 'aura_v3_onboarding' };
+            const STORAGE = { state: 'aura_v3_state', logs: 'aura_v3_logs', settings: 'aura_v3_settings', badges: 'aura_v3_badges', onboarding: 'aura_v3_onboarding', privacy: 'aura_v3_privacy', secure: 'aura_v3_secure' };
 
             const QUOTES = [
                 { text: "La pace viene da dentro. Non cercarla fuori.", author: "Buddha" },
@@ -360,8 +417,8 @@
                 { id: 'week', name: 'Settimana', desc: '7 giorni di fila', icon: '📅', cond: s => s.streak >= 7 },
                 { id: 'breath10', name: 'Respiro Zen', desc: '10 respiri', icon: '🧘', cond: (s,l) => l.filter(x=>x.action==='calma').length >= 10 },
                 { id: 'focus10', name: 'Ninja Focus', desc: '10 focus', icon: '🥷', cond: (s,l) => l.filter(x=>x.action==='focus').length >= 10 },
-                { id: 'evo1', name: 'Amico', desc: 'Prima evoluzione', icon: '🌿', cond: s => s.stage >= 1 },
-                { id: 'evo2', name: 'Guardiano', desc: 'Seconda evoluzione', icon: '🌳', cond: s => s.stage >= 2 },
+                { id: 'evo1', name: 'Risveglio', desc: 'Diventi un Elfo', icon: '🧝‍♂️', cond: s => s.stage >= 1 },
+                { id: 'evo2', name: 'Guardiano', desc: 'Guardiano della Foresta', icon: '🌲', cond: s => s.stage >= 2 },
                 { id: 'morning', name: 'Mattiniero', desc: '5 check mattutini', icon: '🌅', cond: (s,l) => l.filter(x=>x.action==='check'&&new Date(x.ts).getHours()<9).length >= 5 },
                 { id: 'night', name: 'Nottambulo', desc: '5 check serali', icon: '🦉', cond: (s,l) => l.filter(x=>x.action==='check'&&new Date(x.ts).getHours()>=21).length >= 5 },
                 { id: 'grateful', name: 'Grato', desc: '10 gratitudini', icon: '🙏', cond: (s,l) => l.filter(x=>x.gratitude).length >= 10 },
@@ -370,14 +427,155 @@
                 { id: 'century', name: 'Centurione', desc: '100 azioni', icon: '💯', cond: s => s.totalActions >= 100 }
             ];
 
-            const STAGES = [{ name: 'Seme', emoji: '🌱', th: 0 }, { name: 'Amico', emoji: '🌿', th: 10 }, { name: 'Guardiano', emoji: '🌳', th: 25 }];
+            const STAGES = [{ name: 'Germoglio', emoji: '🌱', th: 0 }, { name: 'Elfo', emoji: '🧝‍♂️', th: 10 }, { name: 'Guardiano della Foresta', emoji: '🌲', th: 25 }];
             const LIMIT_TIPS = [['Inizia con un check-in appena sveglio', 'Usa il respiro prima di momenti impegnativi', 'Una piccola cosa alla volta è abbastanza'], ['Ascolta il tuo corpo al mattino', 'Respira prima di prendere decisioni', 'Celebra i piccoli progressi']];
 
-            let state = { mood: 'ok', stage: 0, progress: 0, lastCheck: null, totalActions: 0, dailyActions: 0, lastActionDate: null, streak: 0, startDate: null, petName: 'Compagno', selectedMood: null };
-            let settings = { theme: 'day', vibrate: true, sound: false, tipsEnabled: true, breathRhythm: '4-4', dailyLimit: 10 };
+            let state = { mood: 'ok', stage: 0, progress: 0, lastCheck: null, totalActions: 0, dailyActions: 0, lastActionDate: null, streak: 0, startDate: null, petName: 'Elfo', selectedMood: null };
+            let settings = { theme: 'forest', vibrate: true, sound: true, tipsEnabled: true, breathRhythm: '4-4', dailyLimit: 10, privacyEnabled: false, ambientDefault: 'forest', musicEnabled: false, musicSoundscape: 'forest', musicVolume: 0.35 };
             let badges = {}, logs = [], currentSlide = 0;
 
             const els = {};
+
+            // --- Audio Engine (WebAudio): suoni morbidi + soundscape (rain/waves/forest) ---
+            const AudioEngine = (() => {
+                let ctx = null;
+                let master = null;
+                let uiGain = null;
+                let ambGain = null;
+                let musicGain = null;
+                let ambNodes = [];
+                let musicNodes = [];
+                let started = false;
+
+                const ensure = async () => {
+                    if (!ctx) {
+                        const AC = window.AudioContext || window.webkitAudioContext;
+                        ctx = new AC();
+                        master = ctx.createGain(); master.gain.value = 0.95; master.connect(ctx.destination);
+                        uiGain = ctx.createGain(); uiGain.gain.value = 0.12; uiGain.connect(master);
+                        ambGain = ctx.createGain(); ambGain.gain.value = 0.22; ambGain.connect(master);
+                        musicGain = ctx.createGain(); musicGain.gain.value = settings.musicVolume ?? 0.35; musicGain.connect(master);
+                    }
+                    if (ctx.state === 'suspended') { try { await ctx.resume(); } catch(e){} }
+                    started = true;
+                };
+
+                const stopNodes = (arr) => {
+                    arr.forEach(n => { try{ n.stop?.(); }catch(e){} try{ n.disconnect?.(); }catch(e){} });
+                    arr.length = 0;
+                };
+
+                const noise = () => {
+                    const bufferSize = 2 * (ctx.sampleRate || 44100);
+                    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1);
+                    const src = ctx.createBufferSource();
+                    src.buffer = buffer;
+                    src.loop = true;
+                    return src;
+                };
+
+                const uiChime = async (type='tap') => {
+                    if (!settings.sound) return;
+                    await ensure();
+                    const t = ctx.currentTime;
+                    const o = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    o.type = 'sine';
+                    const f0 = type==='success' ? 740 : type==='warn' ? 440 : 520;
+                    o.frequency.setValueAtTime(f0, t);
+                    o.frequency.exponentialRampToValueAtTime(f0*0.72, t+0.12);
+                    g.gain.setValueAtTime(0.0001, t);
+                    g.gain.exponentialRampToValueAtTime(0.10, t+0.02);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t+0.18);
+                    o.connect(g); g.connect(uiGain);
+                    o.start(t); o.stop(t+0.22);
+                };
+
+                const makeForest = () => {
+                    // rumore + filtro + tremolo lieve (vento/foresta)
+                    const src = noise();
+                    const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value = 900; bp.Q.value = 0.7;
+                    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 1800; lp.Q.value = 0.3;
+                    const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value = 0.08;
+                    const lfoG = ctx.createGain(); lfoG.gain.value = 240;
+                    lfo.connect(lfoG); lfoG.connect(bp.frequency);
+                    src.connect(bp); bp.connect(lp); lp.connect(ambGain);
+                    src.start(); lfo.start();
+                    ambNodes.push(src, bp, lp, lfo, lfoG);
+                };
+
+                const makeRain = () => {
+                    const src = noise();
+                    const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value = 900;
+                    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 4800;
+                    const g = ctx.createGain(); g.gain.value = 0.6;
+                    src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(ambGain);
+                    src.start();
+                    ambNodes.push(src, hp, lp, g);
+                };
+
+                const makeWaves = () => {
+                    const src = noise();
+                    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 900;
+                    const shaper = ctx.createWaveShaper();
+                    shaper.curve = new Float32Array([ -1,-0.6,-0.2,0.2,0.6,1 ]);
+                    const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value = 0.06;
+                    const lfoG = ctx.createGain(); lfoG.gain.value = 0.45;
+                    const g = ctx.createGain(); g.gain.value = 0.55;
+                    lfo.connect(lfoG); lfoG.connect(g.gain);
+                    src.connect(lp); lp.connect(shaper); shaper.connect(g); g.connect(ambGain);
+                    src.start(); lfo.start();
+                    ambNodes.push(src, lp, shaper, lfo, lfoG, g);
+                };
+
+                const setAmbient = async (kind='none') => {
+                    await ensure();
+                    stopNodes(ambNodes);
+                    if (kind === 'none') return;
+                    if (kind === 'rain') makeRain();
+                    else if (kind === 'waves') makeWaves();
+                    else makeForest();
+                };
+
+                const makeMusic = async (kind='forest') => {
+                    await ensure();
+                    stopNodes(musicNodes);
+                    // pad morbido: 2 oscillatori detuned + filtro
+                    const t = ctx.currentTime;
+                    const o1 = ctx.createOscillator(); const o2 = ctx.createOscillator();
+                    o1.type='sine'; o2.type='sine';
+                    const base = kind==='waves' ? 174 : kind==='rain' ? 196 : 164;
+                    o1.frequency.setValueAtTime(base, t);
+                    o2.frequency.setValueAtTime(base*1.01, t);
+                    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 650; lp.Q.value = 0.4;
+                    const g = ctx.createGain(); g.gain.value = 0.0001;
+                    g.gain.exponentialRampToValueAtTime(0.22, t+1.2);
+                    o1.connect(lp); o2.connect(lp); lp.connect(g); g.connect(musicGain);
+                    o1.start(); o2.start();
+                    musicNodes.push(o1,o2,lp,g);
+                };
+
+                const setMusicOn = async (on) => {
+                    await ensure();
+                    if (!on) { stopNodes(musicNodes); return; }
+                    await makeMusic(settings.musicSoundscape || 'forest');
+                };
+
+                const setMusicSoundscape = async (kind) => {
+                    settings.musicSoundscape = kind;
+                    if (settings.musicEnabled) await makeMusic(kind);
+                };
+
+                const setMusicVolume = async (v) => {
+                    settings.musicVolume = v;
+                    await ensure();
+                    musicGain.gain.value = v;
+                };
+
+                return { ensure, uiChime, setAmbient, setMusicOn, setMusicSoundscape, setMusicVolume };
+            })();
 
             function cacheElements() {
                 els.app = document.getElementById('app');
@@ -417,24 +615,129 @@
                 els.evoMessage = document.getElementById('evoMessage');
             }
 
-            function loadData() {
+            
+            // --- Privacy: cifratura locale opzionale (PIN 4 cifre) ---
+            const Privacy = (() => {
+                let unlocked = false;
+                let key = null;
+
+                const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+                const ub64 = (str) => Uint8Array.from(atob(str), c => c.charCodeAt(0)).buffer;
+
+                const deriveKey = async (pin, saltB64) => {
+                    const salt = ub64(saltB64);
+                    const enc = new TextEncoder();
+                    const baseKey = await crypto.subtle.importKey('raw', enc.encode(pin), {name:'PBKDF2'}, false, ['deriveKey']);
+                    return crypto.subtle.deriveKey(
+                        {name:'PBKDF2', salt, iterations: 120000, hash:'SHA-256'},
+                        baseKey,
+                        {name:'AES-GCM', length:256},
+                        false,
+                        ['encrypt','decrypt']
+                    );
+                };
+
+                const encrypt = async (pin, obj, saltB64=null) => {
+                    const salt = saltB64 || b64(crypto.getRandomValues(new Uint8Array(16)));
+                    const k = await deriveKey(pin, salt);
+                    const iv = crypto.getRandomValues(new Uint8Array(12));
+                    const enc = new TextEncoder().encode(JSON.stringify(obj));
+                    const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, k, enc);
+                    return { salt, iv: b64(iv), blob: b64(ct) };
+                };
+
+                const decrypt = async (pin, payload) => {
+                    const k = await deriveKey(pin, payload.salt);
+                    const iv = ub64(payload.iv);
+                    const ct = ub64(payload.blob);
+                    const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv: new Uint8Array(iv)}, k, ct);
+                    const dec = new TextDecoder().decode(pt);
+                    return { obj: JSON.parse(dec), key: k };
+                };
+
+                const isEnabled = () => {
+                    try {
+                        const meta = JSON.parse(localStorage.getItem(STORAGE.privacy) || 'null');
+                        return !!(meta && meta.enabled);
+                    } catch(e){ return false; }
+                };
+
+                const getMeta = () => {
+                    try { return JSON.parse(localStorage.getItem(STORAGE.privacy) || 'null'); } catch(e){ return null; }
+                };
+
+                const setEnabled = async (pin) => {
+                    // crea payload iniziale cifrato con dati attuali
+                    const packed = { state, logs, settings: {...settings, privacyEnabled:true}, badges };
+                    const payload = await encrypt(pin, packed);
+                    localStorage.setItem(STORAGE.privacy, JSON.stringify({ enabled:true, salt: payload.salt }));
+                    localStorage.setItem(STORAGE.secure, JSON.stringify(payload));
+                    settings.privacyEnabled = true;
+                    unlocked = true;
+                    key = await deriveKey(pin, payload.salt);
+                };
+
+                const lock = () => { unlocked = false; key = null; };
+
+                const tryUnlock = async (pin) => {
+                    const payload = JSON.parse(localStorage.getItem(STORAGE.secure) || 'null');
+                    if (!payload) throw new Error('No payload');
+                    const { obj, key: kk } = await decrypt(pin, payload);
+                    key = kk;
+                    unlocked = true;
+                    return obj;
+                };
+
+                const save = async (pin) => {
+                    if (!settings.privacyEnabled) return;
+                    const packed = { state, logs, settings, badges };
+                    const meta = getMeta();
+                    const payload = await encrypt(pin, packed, meta?.salt);
+                    localStorage.setItem(STORAGE.secure, JSON.stringify(payload));
+                };
+
+                return { isEnabled, getMeta, setEnabled, lock, tryUnlock, save, get unlocked(){return unlocked;} };
+            })();
+
+            let _lastPin = null; // tenuto solo in memoria runtime
+
+function loadData() {
                 try {
-                    const s = localStorage.getItem(STORAGE.state); if (s) state = {...state, ...JSON.parse(s)};
-                    const l = localStorage.getItem(STORAGE.logs); if (l) logs = JSON.parse(l);
-                    const st = localStorage.getItem(STORAGE.settings); if (st) settings = {...settings, ...JSON.parse(st)};
-                    const b = localStorage.getItem(STORAGE.badges); if (b) badges = JSON.parse(b);
-                    document.getElementById('app').setAttribute('data-theme', settings.theme);
+                    // Privacy meta (non cifrato)
+                    const meta = JSON.parse(localStorage.getItem(STORAGE.privacy) || 'null');
+                    if (meta && meta.enabled) {
+                        settings.privacyEnabled = true;
+                        // mostra lock: i dati veri sono nel payload cifrato
+                        showLockOverlay();
+                        return;
+                    }
+                    // modalità standard (non cifrata)
+                    const s = JSON.parse(localStorage.getItem(STORAGE.state) || 'null');
+                    const l = JSON.parse(localStorage.getItem(STORAGE.logs) || 'null');
+                    const se = JSON.parse(localStorage.getItem(STORAGE.settings) || 'null');
+                    const b = JSON.parse(localStorage.getItem(STORAGE.badges) || 'null');
+                    if (s) state = { ...state, ...s };
+                    if (Array.isArray(l)) logs = l;
+                    if (se) settings = { ...settings, ...se };
+                    if (b) badges = b;
                 } catch(e) { console.error(e); }
             }
 
-            function saveData() {
+
+            
+function saveData() {
                 try {
+                    if (settings.privacyEnabled) {
+                        if (_lastPin) Privacy.save(_lastPin);
+                        return;
+                    }
                     localStorage.setItem(STORAGE.state, JSON.stringify(state));
-                    localStorage.setItem(STORAGE.logs, JSON.stringify(logs.slice(-2000)));
+                    localStorage.setItem(STORAGE.logs, JSON.stringify(logs));
                     localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
                     localStorage.setItem(STORAGE.badges, JSON.stringify(badges));
                 } catch(e) { console.error(e); }
             }
+
 
             function initStartDate() { if (!state.startDate) { state.startDate = Date.now(); saveData(); } }
 
@@ -483,6 +786,14 @@
                 els.progressLevel.textContent = `Nv ${stage+1}`;
                 els.progressCount.textContent = `${state.progress}/${next}`;
                 els.progressFill.style.width = `${Math.min((state.progress-prev)/(next-prev)*100, 100)}%`;
+           
+                // Musica UI
+                const mf = document.getElementById('musicFab');
+                if (mf) mf.textContent = settings.musicEnabled ? '⏸' : '▶';
+                // Mantieni volume slider coerente
+                const slider = document.querySelector('#musicBanner input[type="range"]');
+                if (slider) slider.value = settings.musicVolume ?? 0.35;
+
             }
 
             function rotateMessage() {
@@ -503,32 +814,88 @@
                 }
             }
 
-            function generateEnv() {
+            
+function generateEnv() {
+                // Stelle (tema night)
                 const stars = document.getElementById('stars');
-                for (let i = 0; i < 30; i++) {
-                    const s = document.createElement('div');
-                    s.className = 'star';
-                    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*50}%;animation-delay:${Math.random()*3}s`;
-                    stars.appendChild(s);
+                if (stars && stars.children.length === 0) {
+                    for (let i = 0; i < 24; i++) {
+                        const s = document.createElement('div');
+                        s.className = 'star';
+                        s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*55}%;animation-delay:${Math.random()*3}s;opacity:${0.3+Math.random()*0.7}`;
+                        stars.appendChild(s);
+                    }
                 }
+
+                // Erba
                 const grass = document.getElementById('grass');
-                for (let i = 0; i < 35; i++) {
-                    const g = document.createElement('div');
-                    g.className = 'grass-blade';
-                    g.style.animationDelay = `${Math.random()*4}s`;
-                    grass.appendChild(g);
+                if (grass && grass.children.length === 0) {
+                    for (let i = 0; i < 40; i++) {
+                        const g = document.createElement('div');
+                        g.className = 'grass-blade';
+                        g.style.cssText = `height:${14+Math.random()*18}px;animation-delay:${Math.random()*2}s;opacity:${0.25+Math.random()*0.35}`;
+                        grass.appendChild(g);
+                    }
                 }
+
+                // Sagome foresta (sempre presenti ma leggere)
+                const fl = document.getElementById('forestLayers');
+                if (fl && fl.children.length === 0) {
+                    const makeLayer = (cls, seed) => {
+                        const wrap = document.createElement('div');
+                        wrap.className = `tree-layer ${cls}`;
+                        // SVG semplice: colline + alberi stilizzati
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+                        svg.setAttribute('viewBox','0 0 1200 400');
+                        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+                        // pseudo random deterministico
+                        const rnd = (n)=> {
+                            const x = Math.sin((seed+n)*999)*10000;
+                            return x - Math.floor(x);
+                        };
+                        let d = `M0,320 C120,${260+rnd(1)*60} 240,${320-rnd(2)*70} 360,${280+rnd(3)*70} C520,${220+rnd(4)*80} 700,${340-rnd(5)*60} 860,${280+rnd(6)*80} C980,${250+rnd(7)*70} 1100,${330-rnd(8)*70} 1200,300 L1200,400 L0,400 Z`;
+                        path.setAttribute('d', d);
+                        path.setAttribute('fill', 'currentColor');
+                        svg.appendChild(path);
+                        wrap.appendChild(svg);
+                        fl.appendChild(wrap);
+                    };
+                    makeLayer('back', 1.7);
+                    makeLayer('', 2.9);
+                    makeLayer('front', 4.1);
+                }
+
+                // Particelle stagionali (più “foresta”)
                 const se = document.getElementById('seasonalElements');
+                if (se) se.innerHTML = '';
                 const month = new Date().getMonth();
-                const elsArr = month >= 2 && month <= 4 ? ['🌸','🦋'] : month >= 5 && month <= 7 ? ['☀️','🌻'] : month >= 8 && month <= 10 ? ['🍂','🍁'] : ['❄️','⭐'];
-                for (let i = 0; i < 6; i++) {
-                    const e = document.createElement('div');
-                    e.className = 'season-particle';
-                    e.textContent = elsArr[Math.floor(Math.random()*elsArr.length)];
-                    e.style.cssText = `left:${Math.random()*100}%;animation-delay:${Math.random()*10}s;animation-duration:${8+Math.random()*4}s`;
-                    se.appendChild(e);
+                const theme = settings.theme || 'forest';
+                let elsArr = ['🍃','✨'];
+                if (theme !== 'forest') {
+                    elsArr = month >= 2 && month <= 4 ? ['🌸','🦋'] : month >= 5 && month <= 7 ? ['☀️','🌻'] : month >= 8 && month <= 10 ? ['🍂','🍁'] : ['❄️','⭐'];
+                }
+                if (se) {
+                    for (let i = 0; i < 7; i++) {
+                        const e = document.createElement('div');
+                        e.className = 'season-particle';
+                        e.textContent = elsArr[Math.floor(Math.random()*elsArr.length)];
+                        e.style.cssText = `left:${Math.random()*100}%;animation-delay:${Math.random()*10}s;animation-duration:${8+Math.random()*4}s;opacity:${0.35+Math.random()*0.35}`;
+                        se.appendChild(e);
+                    }
+                }
+
+                // Lucciole (visibili in tema forest)
+                const ff = document.getElementById('fireflies');
+                if (ff && ff.children.length === 0) {
+                    for (let i = 0; i < 10; i++) {
+                        const f = document.createElement('div');
+                        f.className = 'firefly';
+                        f.style.cssText = `left:${Math.random()*100}%;top:${10+Math.random()*55}%;animation-delay:${Math.random()*6}s;animation-duration:${5+Math.random()*5}s`;
+                        ff.appendChild(f);
+                    }
                 }
             }
+
 
             function showTip(cat) {
                 if (!settings.tipsEnabled) return;
@@ -546,7 +913,7 @@
                 }catch(e){}
 
                 const steps = [
-                    { emoji:'🎧', text:'Prima volta: avvia la musica dal pulsante in basso (▶). Su iPhone serve un tap.' , pulse: () => document.getElementById('aura-audio-fab-btn') },
+                    { emoji:'🎧', text:'Prima volta: avvia la musica dal pulsante in basso (▶). Su iPhone serve un tap.' , pulse: () => document.getElementById('musicFab') },
                     { emoji:'✅', text:'Ora fai un Check‑in: scegli un mood e salva. È il “seme” della giornata.' , pulse: () => document.querySelectorAll('.action-btn')[0] },
                     { emoji:'🫧', text:'Prova “Calma”: 60 secondi di respiro guidato. Micro‑rituale, zero pressione.' , pulse: () => document.querySelectorAll('.action-btn')[1] },
                     { emoji:'🏅', text:'Guarda i badge quando vuoi: piccoli traguardi, non obiettivi.' , pulse: () => document.getElementById('badgesBtn') }
@@ -571,8 +938,8 @@
                     if(emo) emo.textContent = s.emoji;
                     if(txt) txt.textContent = s.text;
                     if(toast){
-                        toast.classList.add('active');
-                        setTimeout(() => toast.classList.remove('active'), 3600);
+                        toast.classList.add('show');
+                        setTimeout(() => toast.classList.remove('show'), 3600);
                     }
                     try{ vibrate(18); }catch(_){}
                     clearPulse();
@@ -595,6 +962,7 @@
             function vibrate(p = 50) {
                 if (settings.vibrate && navigator.vibrate) navigator.vibrate(p);
             }
+            function uiSound(type='tap'){ try{ AudioEngine.uiChime(type); }catch(e){} }
 
             function checkBadges() {
                 BADGES_DEF.forEach(d => {
@@ -724,6 +1092,7 @@
                 document.getElementById('submitMoodBtn').disabled = true;
                 document.getElementById('submitMoodBtn').textContent = 'Seleziona un mood';
                 document.getElementById('checkModal').classList.add('active');
+                uiSound('tap');
                 showTip('check');
             }
 
@@ -743,6 +1112,7 @@
                 setTimeout(() => els.pet.classList.remove('happy'), 600);
                 vibrate();
                 triggerGlow();
+                uiSound('success');
                 saveData();
                 document.getElementById('checkModal').classList.remove('active');
                 if (!checkEvolution()) { updateUI(); checkBadges(); }
@@ -753,11 +1123,17 @@
                 els.breathingOverlay.classList.add('active');
                 els.breathPresets.style.display = 'flex';
                 showTip('calm');
+                uiSound('tap');
+                AudioEngine.setAmbient(settings.ambientDefault || 'forest');
             }
 
             function setAmbient(s) {
                 document.querySelectorAll('.ambient-btn').forEach(b => b.classList.toggle('active', b.dataset.sound === s));
+                settings.ambientDefault = s;
+                saveData();
                 vibrate(20);
+                uiSound('tap');
+                AudioEngine.setAmbient(s);
             }
 
             function startBreath(dur) {
@@ -795,17 +1171,22 @@
                 vibrate([50,100,50]);
                 saveData();
                 els.breathingOverlay.classList.remove('active');
+                AudioEngine.setAmbient('none');
+                uiSound('success');
                 els.breathCircle.classList.remove('inhale','exhale');
                 setTimeout(() => {
                     els.pet.classList.add('happy');
                     setTimeout(() => els.pet.classList.remove('happy'), 600);
                     triggerGlow();
+                uiSound('success');
                     if (!checkEvolution()) { updateUI(); checkBadges(); }
                 }, 300);
             }
 
             function closeBreath() {
                 els.breathingOverlay.classList.remove('active');
+                AudioEngine.setAmbient('none');
+                uiSound('success');
                 els.breathCircle.classList.remove('inhale','exhale');
             }
 
@@ -848,6 +1229,7 @@
                     els.pet.classList.add('happy');
                     setTimeout(() => els.pet.classList.remove('happy'), 600);
                     triggerGlow();
+                uiSound('success');
                     if (!checkEvolution()) { updateUI(); checkBadges(); }
                 }, 200);
             }
@@ -952,25 +1334,151 @@
                 document.getElementById('badgesModal').classList.add('active');
             }
 
-            function openSettings() {
+            
+            function showLockOverlay() {
+                const ov = document.getElementById('lockOverlay');
+                if (!ov) return;
+                ov.classList.add('active');
+                setTimeout(() => {
+                    const i1 = document.getElementById('pin1');
+                    i1 && i1.focus();
+                    ['pin1','pin2','pin3','pin4'].forEach((id,idx) => {
+                        const el = document.getElementById(id);
+                        if (!el) return;
+                        el.oninput = () => {
+                            el.value = el.value.replace(/\D/g,'').slice(0,1);
+                            const next = document.getElementById(['pin1','pin2','pin3','pin4'][idx+1]);
+                            if (el.value && next) next.focus();
+                        };
+                    });
+                }, 150);
+            }
+            function hideLockOverlay(){ document.getElementById('lockOverlay')?.classList.remove('active'); }
+
+            function readPinInputs() {
+                const p = ['pin1','pin2','pin3','pin4'].map(id => (document.getElementById(id)?.value || '').trim()).join('');
+                return p.length===4 ? p : null;
+            }
+
+            async function unlock() {
+                const pin = readPinInputs();
+                if (!pin) { showTip('general'); uiSound('warn'); return; }
+                try {
+                    const obj = await Privacy.tryUnlock(pin);
+                    _lastPin = pin;
+                    state = { ...state, ...obj.state };
+                    logs = Array.isArray(obj.logs) ? obj.logs : [];
+                    settings = { ...settings, ...obj.settings, privacyEnabled:true };
+                    badges = obj.badges || {};
+                    hideLockOverlay();
+                    render();
+                    cacheElements();
+                    updateUI();
+                    if (!localStorage.getItem(STORAGE.onboarding)) document.getElementById('onboarding')?.classList.add('active');
+                    uiSound('success');
+                    vibrate([30,20,30]);
+                } catch(e) {
+                    uiSound('warn');
+                    vibrate([80,60,80]);
+                    ['pin1','pin2','pin3','pin4'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+                    document.getElementById('pin1')?.focus();
+                }
+            }
+
+            async function enablePrivacyFlow() {
+                const pin = prompt('Imposta un PIN di 4 cifre per proteggere i dati (solo locale).');
+                if (!pin || !/^\d{4}$/.test(pin)) return;
+                try {
+                    _lastPin = pin;
+                    await Privacy.setEnabled(pin);
+                    settings.privacyEnabled = true;
+                    localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
+                    uiSound('success');
+                    alert('Protezione attiva. Alla prossima apertura ti verrà chiesto il PIN.');
+                } catch(e) { console.error(e); alert('Impossibile attivare la protezione su questo dispositivo.'); }
+            }
+
+            function disablePrivacyFlow() {
+                if (!confirm('Disattivare la protezione? I dati torneranno in chiaro in locale.')) return;
+                try {
+                    const payload = JSON.parse(localStorage.getItem(STORAGE.secure) || 'null');
+                    localStorage.removeItem(STORAGE.secure);
+                    localStorage.removeItem(STORAGE.privacy);
+                    settings.privacyEnabled = false;
+                    _lastPin = null;
+                    saveData();
+                    alert('Protezione disattivata.');
+                } catch(e) { console.error(e); }
+            }
+
+            // --- Mini player / Musica ---
+            function toggleMusicPanel(forceClose=false){
+                const b = document.getElementById('musicBanner');
+                if(!b) return;
+                if(forceClose) { b.classList.remove('active'); return; }
+                b.classList.toggle('active');
+                uiSound('tap');
+                vibrate(15);
+            }
+
+            async function toggleMusic(){
+                settings.musicEnabled = !settings.musicEnabled;
+                await AudioEngine.setMusicOn(settings.musicEnabled);
+                document.getElementById('musicFab')?.textContent = settings.musicEnabled ? '⏸' : '▶';
+                // aggiorna banner testo/bottoni
+                const b = document.getElementById('musicBanner');
+                if(b) {
+                    const ctl = b.querySelector('.music-ctl');
+                    if(ctl) ctl.textContent = settings.musicEnabled ? 'Pausa' : 'Play';
+                }
+                uiSound(settings.musicEnabled?'success':'tap');
+                saveData();
+            }
+
+            async function setMusicSoundscape(kind){
+                settings.musicSoundscape = kind;
+                await AudioEngine.setMusicSoundscape(kind);
+                document.querySelectorAll('#musicBanner .chip-btn').forEach(btn => btn.classList.remove('active'));
+                const map={forest:0,rain:1,waves:2};
+                const idx=map[kind]??0;
+                document.querySelectorAll('#musicBanner .chip-btn')[idx]?.classList.add('active');
+                uiSound('tap');
+                saveData();
+            }
+
+            async function setMusicVolume(v){
+                const val = Math.max(0, Math.min(0.8, parseFloat(v)));
+                settings.musicVolume = val;
+                await AudioEngine.setMusicVolume(val);
+                saveData();
+            }
+
+
+
+function openSettings() {
                 document.getElementById('settingsModal').classList.add('active');
-                // Aggiorna i toggle e select con i valori attuali
-                document.querySelectorAll('.toggle').forEach(t => t.classList.toggle('active', settings[t.id.replace('Toggle','').toLowerCase()]));
+                document.getElementById('vibrateToggle')?.classList.toggle('active', !!settings.vibrate);
+                document.getElementById('soundToggle')?.classList.toggle('active', !!settings.sound);
+                document.getElementById('tipsToggle')?.classList.toggle('active', !!settings.tipsEnabled);
+                document.getElementById('privacyToggle')?.classList.toggle('active', !!settings.privacyEnabled);
                 document.getElementById('breathRhythm').value = settings.breathRhythm;
                 document.getElementById('dailyLimit').value = settings.dailyLimit;
                 document.querySelectorAll('.theme-option').forEach(o => o.classList.toggle('active', o.dataset.theme === settings.theme));
+                uiSound('tap');
             }
+
 
             function setTheme(t) {
                 settings.theme = t;
                 document.getElementById('app').setAttribute('data-theme', t);
+                generateEnv();
                 document.querySelectorAll('.theme-option').forEach(o => o.classList.toggle('active', o.dataset.theme === t));
                 saveData();
                 vibrate(30);
             }
 
             function toggleVibrate() { settings.vibrate = !settings.vibrate; document.getElementById('vibrateToggle').classList.toggle('active'); saveData(); if (settings.vibrate) vibrate(); }
-            function toggleSound() { settings.sound = !settings.sound; document.getElementById('soundToggle').classList.toggle('active'); saveData(); vibrate(30); }
+            function toggleSound() { settings.sound = !settings.sound; document.getElementById('soundToggle').classList.toggle('active'); saveData(); vibrate(30); uiSound(settings.sound?'success':'tap'); AudioEngine.ensure(); }
             function toggleTips() { settings.tipsEnabled = !settings.tipsEnabled; document.getElementById('tipsToggle').classList.toggle('active'); saveData(); vibrate(30); }
             function changeBreathRhythm() { settings.breathRhythm = document.getElementById('breathRhythm').value; saveData(); vibrate(30); }
             function changeDailyLimit() { settings.dailyLimit = parseInt(document.getElementById('dailyLimit').value); saveData(); vibrate(30); }
@@ -1032,14 +1540,14 @@
                     <div class="onboarding" id="onboarding">
                         <button class="onboarding-skip" onclick="app.skipOnboarding()">Salta</button>
                         <div class="onboarding-slide active" data-slide="0">
-                            <div class="onboarding-icon">🌱</div>
-                            <div class="onboarding-title">Benvenuto in AURA</div>
-                            <div class="onboarding-text">Un compagno silenzioso per i tuoi momenti. Niente notifiche, niente pressioni. Solo presenza.</div>
+                            <div class="onboarding-icon">🧝‍♂️</div>
+                            <div class="onboarding-title">Benvenuto nella Foresta di AURA</div>
+                            <div class="onboarding-text">Un elfo gentile ti accompagna con rituali brevi: respiro, focus e piccoli consigli. Nessun dato esce dal tuo telefono.</div>
                             <div class="onboarding-dots"><div class="onboarding-dot active"></div><div class="onboarding-dot"></div><div class="onboarding-dot"></div><div class="onboarding-dot"></div></div>
                             <button class="onboarding-btn" onclick="app.nextSlide()">Continua</button>
                         </div>
                         <div class="onboarding-slide" data-slide="1">
-                            <div class="onboarding-icon">🐣</div>
+                            <div class="onboarding-icon">🎒</div>
                             <div class="onboarding-title">Come lo chiami?</div>
                             <div class="onboarding-text">Dai un nome al tuo compagno. Crescerà insieme a te.</div>
                             <input type="text" class="onboarding-input" id="petNameInput" placeholder="Nome..." maxlength="12">
@@ -1073,6 +1581,7 @@
                             <div class="streak-badge" id="streakBadge">🔥 0</div>
                         </div>
                         <div class="header-right">
+                            <button class="header-btn" onclick="app.toggleMusicPanel()">🎵</button>
                             <button class="header-btn" id="badgesBtn" onclick="app.openBadges()">🏆</button>
                             <button class="header-btn" onclick="app.openStats()">📊</button>
                             <button class="header-btn" onclick="app.openSettings()">⚙️</button>
@@ -1082,7 +1591,7 @@
                     <div class="daily-quote"><div class="quote-card"><div class="quote-text" id="quoteText"></div><div class="quote-author" id="quoteAuthor"></div></div></div>
 
                     <div class="scene">
-                        <div class="background"><div class="sky"></div><div class="stars" id="stars"></div><div class="ground"></div><div class="seasonal-elements" id="seasonalElements"></div></div>
+                        <div class="background"><div class="sky"></div><div class="stars" id="stars"></div><div class="forest-layers" id="forestLayers"></div><div class="fireflies" id="fireflies"></div><div class="ground"></div><div class="seasonal-elements" id="seasonalElements"></div></div>
                         <div class="grass" id="grass"></div>
                         <div class="progress-display">
                             <div style="display:flex;gap:5px"><span id="progressLevel">Nv 1</span><span id="progressCount">0/10</span></div>
@@ -1093,7 +1602,7 @@
                             <div class="pet-wrapper" onclick="app.petThePet()">
                                 <div class="pet-status" id="petStatus"></div>
                                 <div class="pet" id="pet" data-stage="${state.stage}" data-mood="${state.mood}">
-                                    <div class="glow-ring" id="glowRing"></div>
+                                    <div class="glow-ring" id="glowRing"></div><div class="elf-hat"><div class="elf-hat-tip"></div></div>
                                     <div class="pet-shadow"></div>
                                     <div class="pet-ears"><div class="pet-ear left"></div><div class="pet-ear right"></div></div>
                                     <div class="pet-body"><div class="pet-highlight"></div><div class="pet-cheeks"><div class="pet-cheek"></div><div class="pet-cheek"></div></div></div>
@@ -1114,6 +1623,42 @@
 
                     <div class="bottom-nav">
                         <button class="nav-btn" onclick="app.openJourney()" ${logs.filter(l=>l.ts>=new Date().setHours(0,0,0,0)).length===0?'disabled':''}><span>📜</span><span>I miei passi</span></button>
+                    </div>
+
+                    <button class="music-fab" id="musicFab" onclick="app.toggleMusic()">▶</button>
+                    <div class="music-banner" id="musicBanner">
+                        <div class="music-row">
+                            <div>
+                                <div class="music-title">Soundscape</div>
+                                <div style="font-size:12px;font-weight:700">${settings.musicEnabled?'In riproduzione':'Pronto'}</div>
+                            </div>
+                            <div class="music-chip">
+                                <button class="chip-btn ${settings.musicSoundscape==='forest'?'active':''}" onclick="app.setMusicSoundscape('forest')">🌲</button>
+                                <button class="chip-btn ${settings.musicSoundscape==='rain'?'active':''}" onclick="app.setMusicSoundscape('rain')">🌧️</button>
+                                <button class="chip-btn ${settings.musicSoundscape==='waves'?'active':''}" onclick="app.setMusicSoundscape('waves')">🌊</button>
+                            </div>
+                        </div>
+                        <div class="music-slider"><input type="range" min="0" max="0.8" step="0.01" value="${settings.musicVolume}" oninput="app.setMusicVolume(this.value)"></div>
+                        <div class="music-actions">
+                            <button class="music-ctl" onclick="app.toggleMusic()">${settings.musicEnabled?'Pausa':'Play'}</button>
+                            <button class="music-close" onclick="app.toggleMusicPanel(true)">Chiudi</button>
+                        </div>
+                    </div>
+
+                    <div class="lock-overlay" id="lockOverlay">
+                        <div class="lock-card">
+                            <div class="lock-icon">🔒</div>
+                            <div class="lock-title">AURA è protetta</div>
+                            <div class="lock-text">Inserisci il PIN per sbloccare i tuoi dati locali.</div>
+                            <div class="lock-pin">
+                                <input inputmode="numeric" maxlength="1" id="pin1">
+                                <input inputmode="numeric" maxlength="1" id="pin2">
+                                <input inputmode="numeric" maxlength="1" id="pin3">
+                                <input inputmode="numeric" maxlength="1" id="pin4">
+                            </div>
+                            <button class="lock-btn" onclick="app.unlock()">Sblocca</button>
+                            <div class="lock-hint">Nessun dato viene inviato online.</div>
+                        </div>
                     </div>
 
                     <div class="modal" id="checkModal">
@@ -1233,6 +1778,18 @@
                                     </select>
                                 </div>
                             </div>
+                            
+                            <div class="setting-group">
+                                <div class="setting-group-title">Privacy</div>
+                                <div class="setting-item">
+                                    <div class="setting-label">Protezione dati (PIN)</div>
+                                    <div class="toggle ${settings.privacyEnabled?'active':''}" id="privacyToggle" onclick="${settings.privacyEnabled?'app.disablePrivacyFlow()':'app.enablePrivacyFlow()'}"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div style="font-size:12px;color:var(--text-dim);line-height:1.4;margin-top:8px">
+                                    Dati solo sul dispositivo. Se attivi il PIN, vengono cifrati in locale (AES‑GCM) e AURA chiede il PIN all’avvio.
+                                </div>
+                            </div>
+
                             <button class="reset-btn" onclick="app.resetData()">Reset dati</button>
                         </div>
                     </div>
@@ -1302,26 +1859,39 @@
                 }));
             }
 
-            function init() {
+            
+function init() {
                 loadData();
                 initStartDate();
                 checkNewDay();
                 render();
+                cacheElements();
+                document.getElementById('app').setAttribute('data-theme', settings.theme || 'forest');
                 generateEnv();
                 updateQuote();
-                checkPetStatus();
-                if (!localStorage.getItem(STORAGE.onboarding)) document.getElementById('onboarding').classList.add('active');
+                updateTime();
+                if (Privacy.isEnabled()) {
+                    // dati cifrati: richiede PIN
+                    showLockOverlay();
+                } else {
+                    updateUI();
+                    checkPetStatus();
+                    if (!localStorage.getItem(STORAGE.onboarding)) document.getElementById('onboarding').classList.add('active');
+                }
 
                 setInterval(updateTime, 1000);
                 setInterval(rotateMessage, 18000);
                 setInterval(checkPetStatus, 60000);
             }
 
+
             return {
                 init, nextSlide, skipOnboarding, completeOnboarding, openCheck, submitCheck, openCalm, closeBreath, startBreath, setAmbient,
                 openFocus, startTask, completeTask, petThePet, openStats, switchStatsTab, exportData, openBadges, openSettings,
                 setTheme, toggleVibrate, toggleSound, toggleTips, changeBreathRhythm, changeDailyLimit, resetData,
-                openJourney, closeJourney, closeLimitOverlay, selectMood
+                openJourney, closeJourney, closeLimitOverlay, selectMood,
+                toggleMusicPanel, toggleMusic, setMusicSoundscape, setMusicVolume,
+                unlock, enablePrivacyFlow, disablePrivacyFlow
             };
         })();
 
@@ -1404,6 +1974,63 @@
   font-size:12px;
 }
 #aura-audio-panel.is-hidden{display:none}
+
+        /* --- AURA 3.4: Foresta + Elfo + Mini Player + Privacy --- */
+        .forest-layers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+        .tree-layer{position:absolute;bottom:0;width:120%;left:-10%;height:55%;opacity:.18;filter:blur(0px)}
+        .tree-layer.back{height:70%;opacity:.10;transform:translateY(6px)}
+        .tree-layer.front{height:50%;opacity:.22}
+        .tree-layer svg{width:100%;height:100%}
+        .fireflies{position:absolute;inset:0;pointer-events:none;opacity:.0;transition:opacity 1s}
+        [data-theme=forest] .fireflies{opacity:.55}
+        .firefly{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,255,255,0) 70%);filter:drop-shadow(0 0 10px rgba(255,255,255,.8));animation:fly 6s ease-in-out infinite}
+        @keyframes fly{0%{transform:translate(0,0);opacity:.2}30%{opacity:1}60%{transform:translate(24px,-18px)}100%{transform:translate(0,0);opacity:.2}}
+
+        /* Elf skin: usa la struttura esistente del pet */
+        .pet[data-stage="1"] .pet-body{background:linear-gradient(145deg,#C6E7C9,#7CC488);border-radius:44% 44% 54% 54%}
+        .pet[data-stage="2"] .pet-body{background:linear-gradient(145deg,#BFE8C6,#5FB86F)}
+        .pet .elf-hat{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:84px;height:48px;z-index:3;filter:drop-shadow(0 8px 16px var(--shadow-strong))}
+        .pet .elf-hat::before{content:'';position:absolute;inset:0;background:linear-gradient(145deg,#2F6B45,#1E3A24);border-radius:50% 50% 20% 20%}
+        .pet .elf-hat::after{content:'';position:absolute;right:-10px;top:-10px;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,255,255,.2));opacity:.9}
+        .pet .elf-hat-tip{position:absolute;right:-26px;top:6px;width:46px;height:34px;border-radius:0 0 40px 40px;background:linear-gradient(145deg,#2F6B45,#1E3A24);transform:rotate(18deg)}
+        .pet[data-stage="0"] .elf-hat{display:none}
+        .pet[data-stage="2"] .elf-hat::after{opacity:1;animation:twinkle 2.8s ease-in-out infinite}
+        .pet-ear{border-radius:60% 60% 10% 10%}
+        .pet[data-stage="1"] .pet-ear,.pet[data-stage="2"] .pet-ear{background:linear-gradient(145deg,#C6E7C9,#7CC488)}
+        .pet[data-stage="1"] .pet-ear.left,.pet[data-stage="2"] .pet-ear.left{transform:rotate(-28deg) translateX(-4px)}
+        .pet[data-stage="1"] .pet-ear.right,.pet[data-stage="2"] .pet-ear.right{transform:rotate(28deg) translateX(4px)}
+
+        /* Mini player */
+        .music-fab{position:fixed;right:16px;bottom:108px;width:56px;height:56px;border-radius:18px;border:none;background:var(--gradient-calm);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px var(--shadow-strong);z-index:1200;cursor:pointer;transition:transform .2s,opacity .2s}
+        .music-fab:active{transform:scale(.94)}
+        .music-fab.hidden{opacity:0;pointer-events:none}
+        .music-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:170px;width:min(440px,calc(100vw - 26px));background:rgba(255,255,255,.7);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35);border-radius:18px;box-shadow:0 12px 34px var(--shadow-strong);z-index:1201;display:none;overflow:hidden}
+        [data-theme=night] .music-banner{background:rgba(28,37,48,.65);border-color:rgba(255,255,255,.08)}
+        .music-banner.active{display:block;animation:slideUp .35s cubic-bezier(.34,1.56,.64,1)}
+        .music-row{display:flex;align-items:center;gap:10px;padding:12px 12px}
+        .music-title{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--text-dim)}
+        .music-chip{display:flex;gap:6px;margin-left:auto}
+        .chip-btn{border:none;background:var(--bg-2);padding:8px 10px;border-radius:12px;font-size:14px;cursor:pointer;box-shadow:0 2px 8px var(--shadow-soft)}
+        .chip-btn.active{background:var(--text);color:var(--bg-1)}
+        .music-slider{width:100%;padding:0 14px 12px}
+        .music-slider input{width:100%}
+        .music-actions{display:flex;gap:10px;padding:0 12px 12px}
+        .music-ctl{flex:1;border:none;border-radius:14px;background:var(--text);color:var(--bg-1);padding:12px 10px;font-weight:700;cursor:pointer}
+        .music-close{border:none;border-radius:14px;background:var(--bg-2);padding:12px 10px;font-weight:700;cursor:pointer}
+
+        /* Privacy lock */
+        .lock-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);z-index:6000;display:none;align-items:center;justify-content:center;padding:26px}
+        .lock-overlay.active{display:flex}
+        .lock-card{width:min(420px,100%);background:var(--bg-1);border-radius:24px;padding:26px 20px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+        .lock-icon{font-size:44px;margin-bottom:10px}
+        .lock-title{font-size:20px;font-weight:700;margin-bottom:6px}
+        .lock-text{font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:14px}
+        .lock-pin{display:flex;gap:10px;justify-content:center;margin:10px 0 16px}
+        .lock-pin input{width:54px;height:54px;text-align:center;font-size:22px;font-weight:800;border-radius:16px;border:2px solid var(--accent-light);background:var(--bg-2);color:var(--text)}
+        .lock-pin input:focus{outline:none;border-color:var(--calm)}
+        .lock-btn{width:100%;padding:14px;border:none;border-radius:14px;background:var(--text);color:var(--bg-1);font-weight:800;cursor:pointer}
+        .lock-hint{margin-top:10px;font-size:11px;color:var(--text-dim)}
+
 </style>
 
 <div id="aura-audio-fab" aria-label="Audio AURA">
@@ -1444,7 +2071,7 @@
 (() => {
   const LS = 'aura_audio_v3';
   const fab = document.getElementById('aura-audio-fab');
-  const btn = document.getElementById('aura-audio-fab-btn');
+  const btn = document.getElementById('musicFab');
   const panel = document.getElementById('aura-audio-panel');
   const closeBtn = document.getElementById('aura-audio-close');
   const hideBtn = document.getElementById('aura-audio-hide');

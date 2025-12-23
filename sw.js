@@ -1,12 +1,12 @@
-/* AURA PWA Service Worker (v3.1.0) */
-const CACHE_NAME = 'aura-3.1.0-cache';
+/* AURA PWA Service Worker (v3.4.0) */
+const CACHE_NAME = 'aura-3.4.0-cache';
 const ASSETS = [
   './',
   './index.html',
-  './AURA_3.0_pwa_ios_audio.html',
   './manifest.webmanifest',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './sw.js'
 ];
 
 self.addEventListener('install', (event) => {
