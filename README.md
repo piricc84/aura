@@ -1,16 +1,15 @@
-# AURA 3.0 (PWA iPhone)
+# AURA (PWA) – v3.2.1
 
-## Pubblicazione rapida su GitHub Pages
-1. Carica **tutti** i file di questo bundle nella root del repo.
-2. Verifica che esista `index.html` nella root.
-3. Repo → **Settings → Pages**:
-   - Source: **Deploy from a branch**
-   - Branch: `main` / folder `/root`
-4. Apri il link Pages in **Safari** su iPhone → **Condividi → Aggiungi alla schermata Home**.
+## Deploy su GitHub Pages (consigliato)
+1. Carica questi file nella root del repo:
+   - `index.html`
+   - `manifest.webmanifest`
+   - `sw.js`
+   - cartella `icons/`
+2. GitHub → **Settings → Pages**
+   - Source: `Deploy from a branch`
+   - Branch: `main` / `/root`
+3. Apri l'URL del sito e su iPhone Safari: **Condividi → Aggiungi a Home**.
 
-## Nota audio (iOS)
-La musica parte solo dopo un tap (policy Apple). Usa ▶︎ / ❚❚ e lo slider volume.
-
-## Audio 3.2.0
-- Soundscape: Oceano / Pioggia / Bosco / Spazio.
-- Nel pannello Musica puoi nascondere ♫.
+## Note audio iPhone
+Per policy iOS, l'audio parte solo dopo un'interazione utente (tap su ▶).
