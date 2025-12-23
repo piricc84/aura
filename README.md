@@ -1,15 +1,11 @@
-# AURA (PWA) – v3.2.1
+# AURA PWA – v3.3.0 (merged)
 
-## Deploy su GitHub Pages (consigliato)
-1. Carica questi file nella root del repo:
-   - `index.html`
-   - `manifest.webmanifest`
-   - `sw.js`
-   - cartella `icons/`
-2. GitHub → **Settings → Pages**
-   - Source: `Deploy from a branch`
-   - Branch: `main` / `/root`
-3. Apri l'URL del sito e su iPhone Safari: **Condividi → Aggiungi a Home**.
+- UI/mascotte/badge: come versione precedente
+- Audio: engine più morbido (niente “tono fisso”), pannello 🎧 migliorato
+- Demo: dopo onboarding, micro‑demo guidata con suggerimenti delicati
 
-## Note audio iPhone
-Per policy iOS, l'audio parte solo dopo un'interazione utente (tap su ▶).
+## GitHub Pages
+Carica tutto in root repo e abilita Settings → Pages → main / root.
+
+## iPhone
+Apri in Safari → Condividi → Aggiungi a Home.
